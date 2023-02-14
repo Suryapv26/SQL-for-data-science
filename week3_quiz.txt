@@ -1,0 +1,57 @@
+1) Question 1
+
+All of the questions in this
+quiz pull from the open source Chinook Database. Please refer to the ER Diagram below and familiarize yourself with the table and
+column names to write accurate queries and get the appropriate
+answers.
+
+
+How many albums does the artist Led Zeppelin
+have? 
+
+Ans) SELECT count(al.albumId)
+	,ar.name
+	,ar.artistid
+FROM artists AS ar
+LEFT JOIN albums AS al ON al.artistid = ar.artistid
+WHERE ar.name = 'Led Zeppelin'
+
+2) Create a list of album titles and the unit prices for the artist "Audioslave".
+
+SELECT t.name
+	,t.albumid
+FROM tracks AS t
+WHERE t.albumid IN (
+		SELECT al.albumid
+		FROM artists AS ar
+		LEFT JOIN albums AS al ON al.artistid = ar.artistid
+		WHERE ar.name = "Audioslave"
+		)
+
+3) Find the first and last name of any customer who
+does not have an invoice. Are there any customers returned from the query?  
+
+SELECT c.firstname
+	,c.lastname
+	,i.InvoiceId
+FROM customers c
+LEFT JOIN invoices i ON c.customerid = i.customerid
+WHERE i.invoiceid IS NULL;
+
+4) Find the total price for each album.
+
+SELECT t.AlbumId
+	,sum(t.UnitPrice)
+FROM tracks AS t
+WHERE t.albumid IN (
+		SELECT al.AlbumId
+		FROM albums AS al
+		LEFT JOIN artists AS ar ON al.ArtistId = ar.ArtistId
+		WHERE al.Title = "Big Ones"
+		)
+
+5) How many records are created when you apply a Cartesian join to the invoice and invoice items table?
+
+SELECT invoices.invoiceid
+FROM invoices
+CROSS JOIN invoice_items
